@@ -93,4 +93,58 @@ router.delete('/:id', authenticateJWT, async (req, res) => {
   }
 });
 
+// PATCH /api/apps/:id - Update app (requires JWT)
+router.patch('/:id', authenticateJWT, async (req, res) => {
+  try {
+    const { name, description, is_active } = req.body;
+    const updated = await App.update(req.params.id, { name, description, is_active });
+
+    if (!updated) {
+      return res.status(404).json({
+        error: 'App not found',
+        message: `App with ID '${req.params.id}' does not exist`,
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'App updated successfully',
+    });
+  } catch (error) {
+    console.error('Update app error:', error);
+    res.status(500).json({
+      error: 'Failed to update app',
+      message: 'Internal server error',
+    });
+  }
+});
+
+// POST /api/apps/:id/regenerate-key - Regenerate API key (requires JWT)
+router.post('/:id/regenerate-key', authenticateJWT, async (req, res) => {
+  try {
+    const { apiKey, prefix } = App.generateApiKey();
+    const updated = await App.updateApiKey(req.params.id, apiKey);
+
+    if (!updated) {
+      return res.status(404).json({
+        error: 'App not found',
+        message: `App with ID '${req.params.id}' does not exist`,
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'API key regenerated successfully',
+      api_key: apiKey,
+      api_key_prefix: prefix,
+    });
+  } catch (error) {
+    console.error('Regenerate API key error:', error);
+    res.status(500).json({
+      error: 'Failed to regenerate API key',
+      message: 'Internal server error',
+    });
+  }
+});
+
 module.exports = router;

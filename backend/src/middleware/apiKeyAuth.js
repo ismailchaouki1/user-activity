@@ -1,6 +1,5 @@
 const App = require('../models/App');
 
-// API Key authentication for event ingestion
 const authenticateApiKey = async (req, res, next) => {
   const apiKey = req.headers['x-api-key'];
   const appId = req.body.app_id || req.query.app_id;

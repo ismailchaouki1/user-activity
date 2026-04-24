@@ -85,6 +85,35 @@ class App {
       throw error;
     }
   }
+
+  // Update app
+  static async update(id, appData) {
+    const { name, description, is_active } = appData;
+    try {
+      const [result] = await pool.query(
+        'UPDATE apps SET name = ?, description = ?, is_active = ? WHERE id = ?',
+        [name, description, is_active !== undefined ? is_active : true, id],
+      );
+      return result.affectedRows > 0;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // Update API key
+  static async updateApiKey(id, apiKey) {
+    const apiKeyHash = await this.hashApiKey(apiKey);
+    const apiKeyPrefix = apiKey.substring(0, 10);
+    try {
+      const [result] = await pool.query(
+        'UPDATE apps SET api_key_hash = ?, api_key_prefix = ? WHERE id = ?',
+        [apiKeyHash, apiKeyPrefix, id],
+      );
+      return result.affectedRows > 0;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = App;

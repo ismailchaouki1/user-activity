@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 
-// JWT Authentication middleware for dashboard
 const authenticateJWT = (req, res, next) => {
   const authHeader = req.headers.authorization;
 

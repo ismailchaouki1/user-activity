@@ -1,8 +1,6 @@
--- Create database
 CREATE DATABASE IF NOT EXISTS user_activity;
 USE user_activity;
 
--- Table: apps
 CREATE TABLE IF NOT EXISTS apps (
     id VARCHAR(50) PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -14,7 +12,6 @@ CREATE TABLE IF NOT EXISTS apps (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Table: events
 CREATE TABLE IF NOT EXISTS events (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     app_id VARCHAR(50) NOT NULL,
@@ -39,7 +36,7 @@ CREATE TABLE IF NOT EXISTS events (
     FOREIGN KEY (app_id) REFERENCES apps(id) ON DELETE CASCADE
 );
 
--- Table: admins
+
 CREATE TABLE IF NOT EXISTS admins (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
@@ -49,11 +46,10 @@ CREATE TABLE IF NOT EXISTS admins (
     last_login TIMESTAMP NULL
 );
 
--- Insert default admin (username: admin, password: Admin123!)
--- Password is "Admin123!" hashed with bcrypt
-INSERT INTO admins (username, email, password_hash) VALUES 
-('admin', 'admin@example.com', '$2a$10$rQd5q8Z8Y8Q8Y8Q8Y8Q8YuO8Y8Q8Y8Q8Y8Q8Y8Q8Y8Q8Y8Q8Y8Q8Y');
 
--- Insert sample app for testing
+INSERT INTO admins (username, email, password_hash) VALUES 
+('admin', 'admin@example.com', '$2b$10$hJryEiWJoP3nMxs/dNAm1.4XvauiLw1HQAOgpsegD6wqC/XxnBLt6');
+
+
 INSERT INTO apps (id, name, description, api_key_hash, api_key_prefix) VALUES 
 ('flexdok', 'FlexDok', 'Document Management Platform', '$2a$10$test_hash_placeholder', 'ak_test');
